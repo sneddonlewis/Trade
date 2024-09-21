@@ -2,7 +2,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 
-namespace TradeCli;
+namespace Trade.Application.Binance;
 
 public static class OrderBookBinanceData
 {

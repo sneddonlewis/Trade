@@ -1,6 +1,6 @@
-namespace TradeCli;
+namespace Trade.Application.Binance;
 
-public static class OrderBookEntryParse
+public static class OrderBookEntryBinanceParse
 {
     public static IEnumerable<OrderBookEntry> ToOrderBookEntry(this string[][] matrix) =>
         matrix.Select(rawEntry => new OrderBookEntry(rawEntry.ParsePrice(), rawEntry.ParseQuantity()));

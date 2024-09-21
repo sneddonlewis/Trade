@@ -1,4 +1,6 @@
-namespace TradeCli;
+using Trade.Core;
+
+namespace Trade.Application;
 
 public class OrderBook
 {

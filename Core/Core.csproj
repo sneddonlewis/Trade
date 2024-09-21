@@ -7,9 +7,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Trade.Application\Trade.Application.csproj" />
-      <ProjectReference Include="..\Trade.Core\Trade.Core.csproj" />
-    </ItemGroup>
-
 </Project>

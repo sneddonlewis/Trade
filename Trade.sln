@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeCli", "TradeCli\TradeCli.csproj", "{D5669B0F-12EA-4B97-89FD-F86C95D1FDD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trade.Core", "Trade.Core\Trade.Core.csproj", "{64ECBB55-BBBF-40FB-BC59-3AE163A42D83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trade.Application", "Trade.Application\Trade.Application.csproj", "{D2FD66C7-2F90-4E45-82FB-1E32BE20939C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{D5669B0F-12EA-4B97-89FD-F86C95D1FDD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5669B0F-12EA-4B97-89FD-F86C95D1FDD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5669B0F-12EA-4B97-89FD-F86C95D1FDD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64ECBB55-BBBF-40FB-BC59-3AE163A42D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64ECBB55-BBBF-40FB-BC59-3AE163A42D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64ECBB55-BBBF-40FB-BC59-3AE163A42D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64ECBB55-BBBF-40FB-BC59-3AE163A42D83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2FD66C7-2F90-4E45-82FB-1E32BE20939C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2FD66C7-2F90-4E45-82FB-1E32BE20939C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2FD66C7-2F90-4E45-82FB-1E32BE20939C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2FD66C7-2F90-4E45-82FB-1E32BE20939C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace TradeCli;
+namespace Trade.Application.Binance;
 
 public class BinanceOrderDepthResult
 {

@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using TradeCli;
+using Trade.Application;
+using Trade.Application.Binance;
+using Trade.Core;
 using static System.Console;
 
 const string binanceEndpoint = "wss://fstream.binance.com/stream?streams=btcusdt@depth";

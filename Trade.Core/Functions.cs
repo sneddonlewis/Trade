@@ -1,4 +1,4 @@
-namespace TradeCli;
+namespace Trade.Core;
 
 public static class Functions
 {
