@@ -6,7 +6,7 @@ namespace Trade.Application.Binance;
 
 public static class OrderBookBinanceData
 {
-    public static async Task ReceiveDataFromBinanceApi(this OrderBook orderBook, Uri wsEndpoint, CancellationToken cancellationToken)
+    public static async Task<OrderBook> ReceiveDataFromBinanceApi(Uri wsEndpoint, CancellationToken cancellationToken)
     { 
         var ws = new ClientWebSocket();
         var buffer = new byte[1024 * 4];
@@ -28,9 +28,10 @@ public static class OrderBookBinanceData
                     
                 var streamData = JsonSerializer.Deserialize<BinanceWsDataStream>(fullString);
                 var depthResult = streamData!.Data;
-                
-                orderBook.InsertAsks(depthResult.Asks.ToOrderBookEntry());
-                orderBook.InsertBids(depthResult.Bids.ToOrderBookEntry());
+
+                var orderBook = depthResult.ToOrderBook();
+
+                return orderBook;
             }
         }
         catch (OperationCanceledException) {}
@@ -41,5 +42,7 @@ public static class OrderBookBinanceData
                 await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
             }
         }
+
+        return new OrderBook();
     }
 }

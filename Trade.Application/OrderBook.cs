@@ -7,6 +7,11 @@ public class OrderBook
     private static readonly Comparer<decimal> HighestFirstComparer =
         Comparer<decimal>.Create((prev, next) => prev.CompareTo(next));
 
+    public string Event { get; set; }
+    
+    public long EventTimeStamp { get; set; }
+    
+    public string Symbol { get; set; }
     public SortedDictionary<decimal, OrderBookEntry> Bids { get; } = new(HighestFirstComparer);
     public SortedDictionary<decimal, OrderBookEntry> Asks { get; } = new();
 
