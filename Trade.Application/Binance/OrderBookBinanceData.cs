@@ -6,14 +6,14 @@ namespace Trade.Application.Binance;
 
 public static class OrderBookBinanceData
 {
-    public static async Task<OrderBook> ReceiveDataFromBinanceApi(Uri wsEndpoint, CancellationToken cancellationToken)
+    public static async IAsyncEnumerable<OrderBook> ReceiveDataFromBinanceApi(Uri wsEndpoint, CancellationToken cancellationToken)
     { 
         var ws = new ClientWebSocket();
         var buffer = new byte[1024 * 4];
         StringBuilder jsonString = new();
 
-        try
-        {
+        // try
+        // {
             await ws.ConnectAsync(wsEndpoint, cancellationToken);
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -31,18 +31,17 @@ public static class OrderBookBinanceData
 
                 var orderBook = depthResult.ToOrderBook();
 
-                return orderBook;
+                yield return orderBook;
             }
-        }
-        catch (OperationCanceledException) {}
-        finally
-        {
-            if (ws.State is WebSocketState.Open or WebSocketState.CloseSent)
-            {
-                await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
-            }
-        }
+        // }
+        // catch (OperationCanceledException) {}
+        // finally
+        // {
+        //     if (ws.State is WebSocketState.Open or WebSocketState.CloseSent)
+        //     {
+        //         await ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
+        //     }
+        // }
 
-        return new OrderBook();
     }
 }

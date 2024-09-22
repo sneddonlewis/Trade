@@ -10,15 +10,18 @@ const string binanceEndpoint = "wss://fstream.binance.com/stream?streams=btcusdt
 var cts = new CancellationTokenSource();
 cts.CancelAfter(TimeSpan.FromSeconds(4));
 
-var orderBook = await OrderBookBinanceData.ReceiveDataFromBinanceApi(new Uri(binanceEndpoint), cts.Token);
+var orderBookEnumerable = OrderBookBinanceData.ReceiveDataFromBinanceApi(new Uri(binanceEndpoint), cts.Token);
 
-WriteLine("Received");
-WriteLine(orderBook.Event);
-WriteLine(orderBook.EventTimeStamp);
-WriteLine(orderBook.Symbol);
+await foreach (var orderBook in orderBookEnumerable)
+{
+    WriteLine("Received");
+    WriteLine(orderBook.Event);
+    WriteLine(orderBook.EventTimeStamp);
+    WriteLine(orderBook.Symbol);
 
-WriteLine("Asks");
-orderBook.Asks.Values.ForEach(v => WriteLine($"Ask: {v}"));
+    WriteLine("Asks");
+    orderBook.Asks.Values.ForEach(v => WriteLine($"Ask: {v}"));
 
-WriteLine("Bids");
-orderBook.Bids.Values.ForEach(v => WriteLine($"Bid: {v}"));
+    WriteLine("Bids");
+    orderBook.Bids.Values.ForEach(v => WriteLine($"Bid: {v}"));
+}
