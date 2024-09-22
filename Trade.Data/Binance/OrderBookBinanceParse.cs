@@ -16,7 +16,7 @@ public static class OrderBookBinanceParse
         binanceDto.Asks.ToOrderBookEntry().ForEach(e => asks[e.Price] = e);
         binanceDto.Bids.ToOrderBookEntry().ForEach(e => bids[e.Price] = e);
         
-        var book = new OrderBook(binanceDto.Event, binanceDto.EventTimeStamp, binanceDto.Symbol, asks, bids);
+        var book = new OrderBook(binanceDto.Event, binanceDto.EventTimeStamp, binanceDto.Symbol, asks.Values, bids.Values);
         
         return book;
     }

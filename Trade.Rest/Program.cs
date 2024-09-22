@@ -60,7 +60,10 @@ app.Map("/order_book", async ctx =>
             return;
         }
         
-        var message = JsonSerializer.Serialize(orderBook);
+        var message = JsonSerializer.Serialize(orderBook, new JsonSerializerOptions()
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        });
         var bytes = Encoding.UTF8.GetBytes(message);
         var arrSeg = new ArraySegment<byte>(bytes, 0, bytes.Length);
         await ws.SendAsync(arrSeg, WebSocketMessageType.Text, true, clientAndDataLinkedToken);

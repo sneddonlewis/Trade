@@ -1,6 +1,16 @@
 <main class="main">
   <ng-container *ngIf="orderBookService.data$ | async as data">
-    <p>{{ data }}</p>
+    <p>Symbol: {{ data.symbol }}</p>
+
+    <p>Timestamp: {{ data.eventTimeStamp }}</p>
+
+    <p>Lowest Bid: {{ data.bids[0].price }}</p>
+    <p>Highest Bid: {{ data.bids[data.bids.length - 1].price }}</p>
+    <p>Bid Volume: {{ volume(data.bids) }}</p>
+
+    <p>Lowest Ask: {{ data.asks[0].price }}</p>
+    <p>Highest Ask: {{ data.asks[data.asks.length - 1].price }}</p>
+    <p>Ask Volume: {{ volume(data.asks) }}</p>
   </ng-container>
 </main>
 

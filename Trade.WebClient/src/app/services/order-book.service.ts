@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { OrderBook } from '../types/order-book';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class OrderBookService {
 
   constructor() {}
 
-  connect(): Observable<any> {
+  connect(): Observable<OrderBook> {
     const ws = new WebSocket('wss://localhost:7135/order_book');
 
     ws.onopen = () => {
@@ -24,14 +25,15 @@ export class OrderBookService {
       console.error('WebSocket error:', error);
     };
 
-    return new Observable(observer => {
+    return new Observable<OrderBook>(observer => {
       if (!ws) {
         return;
       }
 
       ws.onmessage = (event) => {
-        console.log(event)
-        observer.next(event.data);
+        const parsedData = JSON.parse(event.data)
+        console.log(parsedData)
+        observer.next(parsedData);
       };
 
       return () => {
