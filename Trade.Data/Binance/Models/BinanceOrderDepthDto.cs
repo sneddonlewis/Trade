@@ -1,8 +1,8 @@
 using System.Text.Json.Serialization;
 
-namespace Trade.Application.Binance;
+namespace Trade.Data.Binance.Models;
 
-public class BinanceOrderDepthResult
+public class BinanceOrderDepthDto
 {
     [JsonPropertyName("e")]
     public string Event { get; set; }
