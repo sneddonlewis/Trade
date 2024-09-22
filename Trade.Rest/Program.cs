@@ -36,39 +36,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-const string binanceEndpoint = "wss://fstream.binance.com/stream?streams=btcusdt@depth";
-app.Map("/order_book", async ctx =>
-{
-    if (!ctx.WebSockets.IsWebSocketRequest)
-    {
-        ctx.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-    }
-
-    var ws = await ctx.WebSockets.AcceptWebSocketAsync();
-    
-    IOrderBookRepo orderBookRepo = new OrderBookBinanceRepo(binanceEndpoint);
-
-    using var cts = new CancellationTokenSource();
-    var clientAndDataLinkedToken = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, ctx.RequestAborted).Token;
-    
-    var orderBookEnumerable = orderBookRepo.StreamAsync(clientAndDataLinkedToken);
-
-    await foreach (var orderBook in orderBookEnumerable)
-    {
-        if (ws.State is WebSocketState.Closed or WebSocketState.Aborted)
-        {
-            return;
-        }
-        
-        var message = JsonSerializer.Serialize(orderBook, new JsonSerializerOptions()
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        });
-        var bytes = Encoding.UTF8.GetBytes(message);
-        var arrSeg = new ArraySegment<byte>(bytes, 0, bytes.Length);
-        await ws.SendAsync(arrSeg, WebSocketMessageType.Text, true, clientAndDataLinkedToken);
-        
-    }
-});
-
 await app.RunAsync();

@@ -11,7 +11,7 @@ export class OrderBookService {
   constructor() {}
 
   connect(): Observable<OrderBook> {
-    const ws = new WebSocket('wss://localhost:7135/order_book');
+    const ws = new WebSocket('wss://localhost:7135/orderBook');
 
     ws.onopen = () => {
       console.log('WebSocket connected');
