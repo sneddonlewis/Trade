@@ -4,14 +4,17 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors(b => b
+    .WithOrigins("http://localhost:4200")
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials());
 
 app.UseWebSockets();
 
@@ -49,8 +52,8 @@ app.Map("/order_book", async ctx =>
         var bytes = Encoding.UTF8.GetBytes(message);
         var arrSeg = new ArraySegment<byte>(bytes, 0, bytes.Length);
         await ws.SendAsync(arrSeg, WebSocketMessageType.Text, true, CancellationToken.None);
-        
-        Thread.Sleep(1000);
+
+        await Task.Delay(1000);
     }
 
 });
