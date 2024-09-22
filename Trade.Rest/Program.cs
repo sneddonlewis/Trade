@@ -1,6 +1,11 @@
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Trade.Application;
+using Trade.Core.Models;
+using Trade.Data.Binance;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +36,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+const string binanceEndpoint = "wss://fstream.binance.com/stream?streams=btcusdt@depth";
 app.Map("/order_book", async ctx =>
 {
     if (!ctx.WebSockets.IsWebSocketRequest)
@@ -38,24 +44,28 @@ app.Map("/order_book", async ctx =>
         ctx.Response.StatusCode = (int)HttpStatusCode.BadRequest;
     }
 
-    int counter = 1;
     var ws = await ctx.WebSockets.AcceptWebSocketAsync();
+    
+    IOrderBookRepo orderBookRepo = new OrderBookBinanceRepo(binanceEndpoint);
 
-    while (true)
+    using var cts = new CancellationTokenSource();
+    var clientAndDataLinkedToken = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, ctx.RequestAborted).Token;
+    
+    var orderBookEnumerable = orderBookRepo.StreamAsync(clientAndDataLinkedToken);
+
+    await foreach (var orderBook in orderBookEnumerable)
     {
         if (ws.State is WebSocketState.Closed or WebSocketState.Aborted)
         {
             return;
         }
         
-        string message = $"Counter {counter++}";
+        var message = JsonSerializer.Serialize(orderBook);
         var bytes = Encoding.UTF8.GetBytes(message);
         var arrSeg = new ArraySegment<byte>(bytes, 0, bytes.Length);
-        await ws.SendAsync(arrSeg, WebSocketMessageType.Text, true, CancellationToken.None);
-
-        await Task.Delay(1000);
+        await ws.SendAsync(arrSeg, WebSocketMessageType.Text, true, clientAndDataLinkedToken);
+        
     }
-
 });
 
 await app.RunAsync();
