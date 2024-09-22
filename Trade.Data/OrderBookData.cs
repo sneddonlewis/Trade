@@ -2,21 +2,22 @@ using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
-using Trade.Application;
 using Trade.Core.Models;
+using Trade.Data.Binance;
 using Trade.Data.Binance.Models;
 
-namespace Trade.Data.Binance;
+namespace Trade.Data;
 
-public class OrderBookBinanceRepo(string endpointUri) : IOrderBookRepo
+public static class OrderBookData
 {
-    public async IAsyncEnumerable<OrderBook> StreamAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    public static async IAsyncEnumerable<OrderBook> StreamAsync(
+        this OrderBookDataSource source, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var ws = new ClientWebSocket();
         var buffer = new byte[1024 * 4];
         StringBuilder jsonString = new();
 
-        await ws.ConnectAsync(new Uri(endpointUri), cancellationToken);
+        await ws.ConnectAsync(source.Endpoint, cancellationToken);
         while (!cancellationToken.IsCancellationRequested)
         {
             var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);

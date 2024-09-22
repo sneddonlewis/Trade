@@ -3,8 +3,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Trade.Application;
-using Trade.Data.Binance;
+using Trade.Data;
 
 namespace Trade.Rest.Controllers;
 
@@ -19,16 +18,13 @@ public class OrderBookController : ControllerBase
             HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             return;
         }
-        const string binanceEndpoint = "wss://fstream.binance.com/stream?streams=btcusdt@depth";
 
         var ws = await HttpContext.WebSockets.AcceptWebSocketAsync();
-    
-        IOrderBookRepo orderBookRepo = new OrderBookBinanceRepo(binanceEndpoint);
 
         using var cts = new CancellationTokenSource();
         var clientAndDataLinkedToken = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken).Token;
     
-        var orderBookEnumerable = orderBookRepo.StreamAsync(clientAndDataLinkedToken);
+        var orderBookEnumerable = OrderBookDataSources.BinanceBtcUsd.StreamAsync(clientAndDataLinkedToken);
 
         await foreach (var orderBook in orderBookEnumerable)
         {
@@ -44,8 +40,6 @@ public class OrderBookController : ControllerBase
             var bytes = Encoding.UTF8.GetBytes(message);
             var arrSeg = new ArraySegment<byte>(bytes, 0, bytes.Length);
             await ws.SendAsync(arrSeg, WebSocketMessageType.Text, true, clientAndDataLinkedToken);
-        
         }
     }
-    
 }

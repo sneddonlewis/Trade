@@ -1,18 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using Trade.Application;
 using Trade.Core;
-using Trade.Data.Binance;
+using Trade.Data;
 using static System.Console;
 
-const string binanceEndpoint = "wss://fstream.binance.com/stream?streams=btcusdt@depth";
 
 var cts = new CancellationTokenSource();
 cts.CancelAfter(TimeSpan.FromSeconds(4));
 
-IOrderBookRepo orderBookRepo = new OrderBookBinanceRepo(binanceEndpoint);
 
-var orderBookEnumerable = orderBookRepo.StreamAsync(cts.Token);
+var orderBookEnumerable = OrderBookDataSources.BinanceBtcUsd.StreamAsync(cts.Token);
 
 try
 {
@@ -24,10 +21,10 @@ try
         WriteLine(orderBook.Symbol);
 
         WriteLine("Asks");
-        orderBook.Asks.Values.ForEach(v => WriteLine($"Ask: {v}"));
+        orderBook.Asks.ForEach(v => WriteLine($"Ask: {v}"));
 
         WriteLine("Bids");
-        orderBook.Bids.Values.ForEach(v => WriteLine($"Bid: {v}"));
+        orderBook.Bids.ForEach(v => WriteLine($"Bid: {v}"));
     }
 
 }
