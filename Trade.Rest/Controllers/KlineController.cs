@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Trade.Rest.ViewModels;
 using TradeCli;
 
 namespace Trade.Rest.Controllers;
@@ -24,7 +25,9 @@ public class KlineController : ControllerBase
         string endpoint = "wss://fstream.binance.com/ws/btcusdt@kline_1m";
         var uri = new Uri(endpoint);
         
-        await uri.StreamAsync(clientAndDataLinkedToken).SendAsync(ws, clientAndDataLinkedToken);
+        await uri
+            .StreamAsync(clientAndDataLinkedToken)
+            .Select(dto => new KlineView(dto.Open, dto.Close, dto.High, dto.Low))
+            .SendAsync(ws, clientAndDataLinkedToken);
     }
-    
 }

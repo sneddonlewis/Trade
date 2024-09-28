@@ -1,23 +1,23 @@
 <main class="main">
-  <ng-container *ngIf="orderBookService.data$ | async as data">
-    <p>Symbol: {{ data.symbol }}</p>
+<!--  <ng-container *ngIf="orderBookService.data$ | async as data">-->
+<!--    <p>Symbol: {{ data.symbol }}</p>-->
 
-    <p>Timestamp: {{ data.eventTimeStamp }}</p>
+<!--    <p>Timestamp: {{ data.eventTimeStamp }}</p>-->
 
-    <p>Lowest Bid: {{ data.bids[0].price }}</p>
-    <p>Highest Bid: {{ data.bids[data.bids.length - 1].price }}</p>
-    <p>Bid Volume: {{ volume(data.bids) }}</p>
+<!--    <p>Lowest Bid: {{ data.bids[0].price }}</p>-->
+<!--    <p>Highest Bid: {{ data.bids[data.bids.length - 1].price }}</p>-->
+<!--    <p>Bid Volume: {{ volume(data.bids) }}</p>-->
 
-    <p>Lowest Ask: {{ data.asks[0].price }}</p>
-    <p>Highest Ask: {{ data.asks[data.asks.length - 1].price }}</p>
-    <p>Ask Volume: {{ volume(data.asks) }}</p>
-  </ng-container>
+<!--    <p>Lowest Ask: {{ data.asks[0].price }}</p>-->
+<!--    <p>Highest Ask: {{ data.asks[data.asks.length - 1].price }}</p>-->
+<!--    <p>Ask Volume: {{ volume(data.asks) }}</p>-->
+<!--  </ng-container>-->
 
   <ng-container *ngIf="klineService.data$ | async as chartData">
-    <p>Open: {{ chartData.o }}</p>
-    <p>High: {{ chartData.h }}</p>
-    <p>Low: {{ chartData.l }}</p>
-    <p>Close: {{ chartData.c }}</p>
+    <p>Open: {{ chartData.open }}</p>
+    <p>Close: {{ chartData.close }}</p>
+    <p>High: {{ chartData.high }}</p>
+    <p>Low: {{ chartData.low }}</p>
   </ng-container>
 </main>
 

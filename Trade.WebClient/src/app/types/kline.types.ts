@@ -1,6 +1,6 @@
 export interface KlineData {
-  o: number,
-  h: number,
-  l: number,
-  c: number,
+  open: number,
+  close: number,
+  high: number,
+  low: number,
 }
