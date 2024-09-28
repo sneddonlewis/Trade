@@ -12,6 +12,13 @@
     <p>Highest Ask: {{ data.asks[data.asks.length - 1].price }}</p>
     <p>Ask Volume: {{ volume(data.asks) }}</p>
   </ng-container>
+
+  <ng-container *ngIf="klineService.data$ | async as chartData">
+    <p>Open: {{ chartData.o }}</p>
+    <p>High: {{ chartData.h }}</p>
+    <p>Low: {{ chartData.l }}</p>
+    <p>Close: {{ chartData.c }}</p>
+  </ng-container>
 </main>
 
 <router-outlet />

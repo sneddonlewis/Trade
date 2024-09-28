@@ -1,14 +1,15 @@
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
 
 namespace TradeCli;
 
-public class Utils
+public static class KlineStream
 {
-    public static async Task Connect(Uri endpoint, CancellationToken cancellationToken)
+    public static async IAsyncEnumerable<BinanceKlineDto> StreamAsync(
+        this Uri endpoint, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        
         var ws = new ClientWebSocket();
         var buffer = new byte[1024 * 4];
         StringBuilder jsonString = new();
@@ -19,15 +20,16 @@ public class Utils
             var result = await ws.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken);
             var messageFragment = Encoding.UTF8.GetString(buffer, 0, result.Count);
             jsonString.Append(messageFragment);
-
+        
             if (!result.EndOfMessage) continue;
-
+                
             var fullString = jsonString.ToString();
             jsonString.Clear();
+                    
+            var streamData = JsonSerializer.Deserialize<BinanceKlineDataDto>(fullString);
 
-            // var data = JsonSerializer.Deserialize<BinanceKlineDataDto>(fullString);
-            //
-            // Console.WriteLine(data.TickerSymbol);
+            yield return streamData!.Kline;
         }
     }
+    
 }
